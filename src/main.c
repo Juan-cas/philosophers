@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:30:09 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/06/05 21:25:05 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/06/05 23:28:51 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,10 @@
 
 int main(int argc, char **argv)
 {
-	t_program table;
-	t_philo philos;
-
 	if (argc == 5 || argc == 6)
 	{
 		if (args_parser(argv))
 			return (1);
-		init_structs(&table, &philos, argv);
 		philosophers(argc, argv);
 	}
 	else

@@ -6,18 +6,17 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:32:30 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/06/05 21:26:08 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/06/09 03:55:34 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_H
 #define PHILOSOPHERS_H
 
-#include <f2fs_fs.h>
 #include <limits.h>
-#include <threads.h>
+#include <pthread.h>
 #include <unistd.h>
-#include <time.h>
+#include <stdio.h>
 #include <sys/time.h>
 #include "./lib/libft/libft.h"
 
@@ -25,14 +24,13 @@ typedef pthread_mutex_t t_mutex;
 typedef struct t_info p_info;
 typedef struct p_philo p_philo;
 
-
 # define RST	"\033[0" //reset to default color
 # define RED	"\033[1;31m" //bold red
+# define C		"\033[1;36m" //Bold cyan
 # define G		"\033[1;32m" //bold green
 # define Y		"\033[1;33m" //bold yellow
 # define B		"\033[1;34m" //bold Blue
 # define M		"\033[1;35m" //bold magenta
-# define C		"\033[1;36m" //Bold cyan
 # define W		"\033[1;37m" //bold white
 
 typedef struct s_philo
@@ -79,6 +77,6 @@ int args_parser(char **argv);
 long	ft_atol(const char *str);
 size_t get_current_time();
 int ft_usleep(size_t miliseconds);
-void init_structs(t_program *table, t_philo *philo, char **argv);
+void init_structs(t_program *table, t_philo *philo, char **argv, t_mutex *forks);
 
 #endif

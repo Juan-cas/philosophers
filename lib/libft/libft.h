@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 21:28:29 by juan-cas          #+#    #+#             */
-/*   Updated: 2023/10/14 01:40:14 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/06/06 00:20:28 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 # include <limits.h>
 # include <stddef.h>
-# include <stdio.h>
 # include <stdlib.h>
 
 typedef struct s_list
