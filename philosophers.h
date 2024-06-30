@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:32:30 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/06/09 03:55:34 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/06/18 03:55:20 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_program
 }					t_program;
 
 //main function
-void philosophers(int argc, char **argv);
+void philosophers(char **argv);
 
 //errors
 int param_error(int i);
