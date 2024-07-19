@@ -14,6 +14,7 @@
 
 static void simulation_start(p_info  *table)
 {
+
 }
 
 void philosophers(char **argv)
@@ -23,7 +24,5 @@ void philosophers(char **argv)
 	t_mutex		forks[ft_atoi(argv[1])];
 
 	init_structs(&table, philos, argv, forks);
-	simulation_start(table);
-
-
+	simulation_start(&table);
 }

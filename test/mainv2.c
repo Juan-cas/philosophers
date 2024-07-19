@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:32:44 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/06/30 21:00:41 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/07/19 20:57:01 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/time.h>
+#include "../lib/libft/libft.h"
+#include <time.h>
 
 
 typedef struct s_control t_control;
@@ -25,10 +28,13 @@ typedef struct s_soft
 	int count;
 	int id;
 	int total_philos;
+	int time_to_eat;
+	int start_time;
+	int time_to_die;
 	t_mutex *right_fork;
 	t_mutex *left_fork;
 	t_mutex *forks;
-//    t_control *mind_control;
+    t_control *mind_control;
 }	t_soft;
 
 typedef struct s_control
@@ -36,6 +42,25 @@ typedef struct s_control
     int     control;
     t_soft  *philos;
 }   t_control;
+
+size_t get_current_time()
+{
+	struct timeval time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		write(2, "gettimeofday() error\n", 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+int ft_usleep(size_t miliseconds)
+{
+	size_t start;
+
+	start = get_current_time();
+	while ((get_current_time() - start) < miliseconds)
+		usleep(500);
+	return (0);
+}
 
 static void lets_add_forks(t_control *control, int id, t_mutex *forks)
 {
@@ -73,9 +98,7 @@ static void lets_eat(int count, t_soft *lego)
     else
     {
         pthread_mutex_lock(lego->right_fork);
-        printf("i am philo #%d and i grabbed the right fork\n", lego->id);
         pthread_mutex_lock(lego->left_fork);
-        printf("i am philo #%d and i grabbed the left fork\n", lego->id);
     }
     printf("i ate %d times and im philo #%d\n", count, lego->id);
     pthread_mutex_unlock(lego->right_fork);
@@ -124,6 +147,7 @@ int main (int argc, char **argv)
 		lego[i].id = i;
 		lego[i].count = atoi(argv[2]);
 		lego[i].total_philos = number;
+		lego[i].start_time =
 		i++;
 	}
 	while (++k < number)
