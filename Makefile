@@ -14,8 +14,15 @@ $(SRC_DIR)/parsing/parsing.c \
 $(SRC_DIR)/errors/param_error.c \
 $(SRC_DIR)/philo.c \
 $(SRC_DIR)/utils/atol.c \
+$(SRC_DIR)/utils/ft_atost.c \
+$(SRC_DIR)/utils/ft_get_current_time.c \
+$(SRC_DIR)/utils/ft_usleep.c \
+$(SRC_DIR)/utils/check_health.c \
+$(SRC_DIR)/utils/clean_up.c \
+$(SRC_DIR)/parsing/init_mutexes.c \
+$(SRC_DIR)/parsing/init_philos.c \
 $(SRC_DIR)/errors/errors.c \
-$(SRC_DIR)/utils/init_structs.c \
+$(SRC_DIR)/parsing/init_structs.c \
 $(SRC_DIR)/utils/ft_get_current_time.c \
 $(SRC_DIR)/utils/ft_usleep.c \
 

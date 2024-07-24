@@ -6,50 +6,91 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 00:40:13 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/19 20:19:34 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:33:23 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
-static void lets_sleep(int count, t_philo *lego)
+
+static void	print_message(char *str, t_soft *information)
 {
-	printf("i am %d and im going to sleep for the %d time\n", lego->id + 1, count);
-	ft_usleep(400);
+	size_t	time;
+
+	pthread_mutex_lock(information->control->talk);
+	time = get_current_time() - information->start_time;
+	if (information->control->death == 0)
+		printf("%zu %d %s\n", time, information->id, str);
+	pthread_mutex_unlock(information->control->talk);
 }
 
-static void lets_think(int count, t_philo *lego)
+static void lets_sleep(t_soft *information)
 {
-	printf("i am %d and im thinking for the %d time\n", lego->id + 1, count);
-}
-
-static void lets_eat(int count, t_philo *lego)
-{
-	if (lego->id == 0) {
-		pthread_mutex_lock(lego->left_fork);
-		pthread_mutex_lock(lego->right_fork);
-	}
-	else
+	check_health(information);
+	if (information->control->death == 0)
 	{
-		pthread_mutex_lock(lego->right_fork);
-		pthread_mutex_lock(lego->left_fork);
+		print_message("is sleeping", information);
+		ft_usleep(information->time_to_sleep);
 	}
-	printf("i ate %d times and im philo #%d\n", count, lego->id);
-	pthread_mutex_unlock(lego->right_fork);
-	pthread_mutex_unlock(lego->left_fork);
 }
+
+static void lets_think(t_soft *information)
+{
+	check_health(information);
+	if (information->control->death == 0)
+	{
+		print_message("is thinking", information);
+	}
+}
+
+static void lets_eat(t_soft *information)
+{
+	if (information->control->death == 0)
+	{
+		if (information->id == 0) {
+			pthread_mutex_lock(information->left_fork);
+			print_message("has taken a fork", information);
+			pthread_mutex_lock(information->right_fork);
+			print_message("has taken a fork", information);
+		}
+		else
+		{
+			pthread_mutex_lock(information->right_fork);
+			print_message("has taken a fork", information);
+			pthread_mutex_lock(information->left_fork);
+			print_message("has taken a fork", information);
+		}
+		check_health(information);
+		print_message("has eaten", information);
+		pthread_mutex_lock(information->control->meal);
+		information->last_meal = get_current_time();
+		if (information->times_to_eat != -1)
+			information->times_to_eat--;
+		pthread_mutex_unlock(information->control->meal);
+		ft_usleep(information->time_to_sleep);
+		pthread_mutex_unlock(information->right_fork);
+		pthread_mutex_unlock(information->left_fork);
+	}
+}
+
 
 void *routine(void *pointer)
 {
-	int i = 0;
-	t_philo *philo_num = pointer;
+	t_soft *information = pointer;
+
+	information->start_time = get_current_time();
+	information->last_meal = get_current_time();
 	while (1)
 	{
-		lets_eat(i + 1, philo_num);
-		lets_think(i + 1, philo_num);
-		lets_sleep(i + 1, philo_num);
-		i++;
-		if (i == philo_num->num_times_to_eat)
+		lets_eat(information);
+		lets_think(information);
+		lets_sleep(information);
+		if (information->times_to_eat != -1)
+		{
+			if (information->times_to_eat == 0)
+				break ;
+		}
+		if (information->control->death == 1)
 			break ;
 	}
 	return (0);

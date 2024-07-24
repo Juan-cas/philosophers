@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 15:32:44 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/19 20:57:01 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:18:28 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,157 +19,39 @@
 #include <time.h>
 
 
-typedef struct s_control t_control;
-typedef pthread_mutex_t t_mutex;
 
-typedef struct s_soft
+
+void last_destroy(t_control *control)
 {
-	pthread_t philo;
-	int count;
-	int id;
-	int total_philos;
-	int time_to_eat;
-	int start_time;
-	int time_to_die;
-	t_mutex *right_fork;
-	t_mutex *left_fork;
-	t_mutex *forks;
-    t_control *mind_control;
-}	t_soft;
-
-typedef struct s_control
-{
-    int     control;
-    t_soft  *philos;
-}   t_control;
-
-size_t get_current_time()
-{
-	struct timeval time;
-
-	if (gettimeofday(&time, NULL) == -1)
-		write(2, "gettimeofday() error\n", 22);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
-int ft_usleep(size_t miliseconds)
-{
-	size_t start;
-
-	start = get_current_time();
-	while ((get_current_time() - start) < miliseconds)
-		usleep(500);
-	return (0);
-}
-
-static void lets_add_forks(t_control *control, int id, t_mutex *forks)
-{
-	if (id == 0)
-	{
-		control->philos[id].left_fork = &forks[control->philos->total_philos - 1];
-		control->philos[id].right_fork = &forks[id];
-	}
-	else
-	{
-		control->philos[id].left_fork = &forks[id - 1];
-		control->philos[id].right_fork = &forks[id];
-	}
-
+	pthread_mutex_destroy(control->flag);
+	pthread_mutex_destroy(control->talk);
+	pthread_mutex_destroy(control->meal);
 }
 
 
-static void lets_sleep(int count, t_soft *lego)
-{
-	printf("i am %d and im going to sleep for the %d time\n", lego->id + 1, count);
-	usleep(400);
-}
 
-static void lets_think(int count, t_soft *lego)
-{
-	printf("i am %d and im thinking for the %d time\n", lego->id + 1, count);
-}
-
-static void lets_eat(int count, t_soft *lego)
-{
-    if (lego->id == 0) {
-        pthread_mutex_lock(lego->left_fork);
-        pthread_mutex_lock(lego->right_fork);
-    }
-    else
-    {
-        pthread_mutex_lock(lego->right_fork);
-        pthread_mutex_lock(lego->left_fork);
-    }
-    printf("i ate %d times and im philo #%d\n", count, lego->id);
-    pthread_mutex_unlock(lego->right_fork);
-    pthread_mutex_unlock(lego->left_fork);
-}
-
-
-void *routine(void *pointer)
-{
-	int i = 0;
-	t_soft *lego = pointer;
-	while (1)
-	{
-		lets_eat(i + 1, lego);
-		lets_think(i + 1, lego);
-		lets_sleep(i + 1, lego);
-		i++;
-        if (i == lego->count)
-            break ;
-	}
-	return (0);
-}
-
-static void init_control(t_control *control, t_soft *lego, int numb_phil)
-{
-    control->philos = lego;
-    control->control = numb_phil;
-}
 
 int main (int argc, char **argv)
 {
-	if (argc < 2)
+	if (argc < 5 || argc > 6)
 		return (1);
 
-	t_soft lego[atoi(argv[1])];
-	t_mutex	forks[atoi(argv[1])];
-    t_control control;
-
-    init_control(&control, lego, atoi(argv[1]));
-	int i = 0;
-	int k = -1;
-    int number = atoi(argv[1]);
-
-	while (i < number)
-	{
-		lego[i].id = i;
-		lego[i].count = atoi(argv[2]);
-		lego[i].total_philos = number;
-		lego[i].start_time =
-		i++;
-	}
-	while (++k < number)
-    {
-        if (pthread_mutex_init(&forks[k], NULL) == -1)
-            return (1);
-    }
+	init_control(&control, information);
 
 	k = -1;
-	while (++k < number)
-		lets_add_forks(&control, lego[k].id, forks);
 
 	int  create = -1;
 	while (++create < number)
-        pthread_create(&lego[create].philo, NULL, &routine, (void *)&lego[create]);
+        pthread_create(&information[create].philo, NULL, &routine, (void *)&information[create]);
 
     int join = -1;
 	while (++join < number)
-        pthread_join(lego[join].philo, NULL);
+        pthread_join(information[join].philo, NULL);
 
     int destroy = -1;
 	while (++destroy < number)
         pthread_mutex_destroy(&forks[destroy]);
-	return (0);
+	last_destroy(&control);
+
+	return (free(control.talk), free(control.flag), free(control.meal), 0);
 }
