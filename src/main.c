@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:30:09 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/06/18 03:55:13 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:59:20 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	{
 		if (args_parser(argv))
 			return (1);
-		philosophers(argv);
+		philosophers(argc, argv);
 	}
 	else
 	{

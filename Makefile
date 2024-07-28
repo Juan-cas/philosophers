@@ -25,6 +25,9 @@ $(SRC_DIR)/errors/errors.c \
 $(SRC_DIR)/parsing/init_structs.c \
 $(SRC_DIR)/utils/ft_get_current_time.c \
 $(SRC_DIR)/utils/ft_usleep.c \
+$(SRC_DIR)/utils/routine.c \
+$(SRC_DIR)/utils/check_health.c \
+
 
 # Object files
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))

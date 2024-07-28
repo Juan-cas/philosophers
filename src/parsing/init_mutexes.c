@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:41:26 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/24 13:20:43 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:22:30 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	init_forks(t_control *control)
 		if (pthread_mutex_init(&control->forks[i],NULL) != 0)
 			return (i);
 	}
-	return (0);
+	return (-1);
 }
 
 static int control_mutexes(t_control *control)
@@ -34,17 +34,27 @@ static int control_mutexes(t_control *control)
 		return (2);
 	if (pthread_mutex_init(control->meal, NULL) != 0)
 		return (3);
-	return (0);
+	return (-1);
 }
 
 
 int init_mutexes(t_control *control)
 {
-	if (mind_control_check(control_mutexes(control), control))
-		return (1);
-	if (janitor_forks(init_forks(control), control))
+	int checker;
+
+	checker = control_mutexes(control);
+	if (checker != -1)
 	{
+		mind_control_check(checker, control);
+		free_the_mind(control);
+		return (1);
+	}
+	checker = init_forks(control);
+	if (checker != -1)
+	{
+		cleaner_of_forks(control, checker);
 		mind_control_check(3, control);
+		free_the_mind(control);
 		return (1);
 	}
 

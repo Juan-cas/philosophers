@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:32:30 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/24 13:21:01 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:20:37 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_control
 }   t_control;
 
 //main function
-void	philosophers(char **argv);
+void	philosophers(int argc, char **argv);
 
 //errors
 int		param_error(int i);
@@ -72,14 +72,15 @@ int		args_parser(char **argv);
 //utils
 long	ft_atol(const char *str);
 void	lets_add_forks(t_control *control, t_mutex *forks);
-void	init_control(t_control *control, t_soft *information);
+void	init_control(t_control *control);
 size_t	ft_atost(const char *str);
 void	*routine(void *pointer);
 size_t	get_current_time();
 int		init_mutexes(t_control *control);
-int		janitor_forks(int order, t_control *control);
+int		cleaner_of_forks(t_control *control, int order);
 int		ft_usleep(size_t miliseconds);
 void	init_philos(t_control *control, t_soft *information, char **argv, int argc);
 int		mind_control_check(int order, t_control *control);
 void	free_the_mind(t_control *control);
+int		check_health(t_soft *information);
 #endif

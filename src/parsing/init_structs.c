@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:24:40 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/24 12:13:36 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:40:41 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void init_philos(t_control *control, t_soft *information, char **argv, int argc)
 	}
 }
 
-void init_control(t_control *control, t_soft *information)
+void init_control(t_control *control)
 {
 	control->flag = malloc(sizeof(t_mutex));
 	control->talk = malloc(sizeof(t_mutex));
@@ -61,5 +61,4 @@ void init_control(t_control *control, t_soft *information)
 	pthread_mutex_init(control->flag, NULL);
 	pthread_mutex_init(control->meal, NULL);
 	control->death = 0;
-	control->philos = information;
 }

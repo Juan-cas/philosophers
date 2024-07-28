@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:34:18 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/24 13:20:43 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:20:30 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void free_the_mind(t_control *control)
 {
+
 	free(control->flag);
 	free(control->talk);
 	free(control->meal);
@@ -42,7 +43,7 @@ int	mind_control_check(int order, t_control *control)
 	return (0);
 }
 
-int janitor_forks(int order, t_control *control)
+int cleaner_of_forks(t_control *control, int order)
 {
 	int i;
 	int j;
