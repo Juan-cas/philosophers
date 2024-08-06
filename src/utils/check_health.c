@@ -6,22 +6,23 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:33:40 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/25 18:14:27 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:16:56 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
-int check_health(t_soft *information)
+void	check_health(t_soft *philo)
 {
-	pthread_mutex_lock(information->control->flag);
-	if (get_current_time() - information->last_meal >= information->time_to_die
-		&& information->control->death == 0)
+	size_t last_meal;
+
+	pthread_mutex_lock(philo->control->flag);
+	last_meal =  get_current_time() - philo->last_meal;
+	if (last_meal >= philo->time_to_die
+			&& philo->control->death == 0)
 	{
-		printf("%zu %d has died", get_current_time(), information->id + 1);
-		information->control->death = 1;
-		return(pthread_mutex_unlock(information->control->flag), 1);
+		printf("%zu %d has died\n",get_current_time() - philo->start_time, philo->id);
+		philo->control->death = 1;
 	}
-	pthread_mutex_unlock(information->control->flag);
-	return (0);
+	pthread_mutex_unlock(philo->control->flag);
 }

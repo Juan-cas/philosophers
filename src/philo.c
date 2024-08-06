@@ -6,52 +6,60 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 19:57:56 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/28 21:13:09 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:16:06 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
 
-static void philo_cleaner(t_soft *philos, int total)
+static void philo_cleaner(t_soft *philo, int total)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	while (++i < total)
-		pthread_join(philos[i].philo, NULL);
+		pthread_join(philo[i].philo, NULL);
 }
 
-static void philo_creator(t_soft *philos, int total)
+static void philo_creator(t_soft *philo, int total)
 {
 	int i;
 
 	i = -1;
 	while (++i < total)
-		pthread_create(&philos[i].philo, NULL, routine, (void *)&philos[i]);
+	{
+		pthread_create(&philo[i].philo, NULL, routine, (void *)&philo[i]);
+	}
 }
 
-static void	simulation_start(t_soft *philos, t_control *control)
+static void	simulation_start(t_soft *philo, t_control *control)
 {
 	int	total;
 
-	total = philos->total_philos;
+	total = philo->total_philos;
 
-	philo_creator(philos, total);
-	philo_cleaner(philos, total);
+	philo_creator(philo, total);
+	philo_cleaner(philo, total);
 	cleaner_of_forks(control, total);
-	free_the_mind(control);
-
+	mind_control_check(control, 3);
+	clear_start_flags(control);
 }
 
 void philosophers(int argc, char **argv)
 {
 	t_control	control;
-	t_soft		philos[ft_atoi(argv[1])];
+	t_soft		philo[ft_atoi(argv[1])];
 	t_mutex		forks[ft_atoi(argv[1])];
+	t_mutex		simulation_flag;
 
-	init_control(&control);
-	init_philos(&control, philos, argv, argc);
-	control.philos = philos;
-	lets_add_forks(&control, forks);
-	simulation_start(philos, &control);
+
+	init_control(&control, forks);
+	init_philos(&control, philo, argv, argc);
+	control.philos = philo;
+	control.start_flag = &simulation_flag;
+	init_mutexes(&control);
+	init_tags(&control.fork_tags, argv);
+	lets_add_forks(philo, forks, control.fork_tags);
+	assign_start_flag(&control, philo);
+	simulation_start(philo, &control);
 }

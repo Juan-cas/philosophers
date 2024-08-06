@@ -6,59 +6,83 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:24:40 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/28 18:40:41 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/08/06 09:46:05 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
-void lets_add_forks(t_control *control, t_mutex *forks)
+
+int init_tags(int **fork_tags, char **argv)
+{
+	int i;
+	int	total;
+
+	i = -1;
+	total = ft_atoi(argv[1]);
+	*fork_tags = malloc(total * sizeof(int));
+	if (*fork_tags == NULL)
+		return (1);
+	while (++i < total)
+		(*fork_tags)[i] = 0;
+	return (0);
+}
+
+void lets_add_forks(t_soft *philos, t_mutex *forks,
+					int *fork_tags)
 {
 	int	i;
+	int total;
+
 	i = -1;
-	while (++i < control->philos->total_philos)
+	total = philos[0].total_philos;
+	while (++i < total)
 	{
 		if (i == 0)
 		{
-			control->philos[i].left_fork = &forks[control->philos->total_philos - 1];
-			control->philos[i].right_fork = &forks[i];
+			philos[i].left_fork = &forks[total - 1];
+			philos[i].l_status = &fork_tags[total - 1];
+			philos[i].right_fork = &forks[i];
+			philos[i].r_status = &fork_tags[i];
 		}
 		else
 		{
-			control->philos[i].left_fork = &forks[i - 1];
-			control->philos[i].right_fork = &forks[i];
+			philos[i].left_fork = &forks[i - 1];
+			philos[i].l_status = &fork_tags[i - 1];
+			philos[i].right_fork = &forks[i];
+			philos[i].r_status = &fork_tags[i];
 		}
 	}
 }
 
-void init_philos(t_control *control, t_soft *information, char **argv, int argc)
+void init_philos(t_control *control, t_soft *philo, char **argv, int argc)
 {
 	int	i;
 	int number;
 
-	i = 0;
+	i = -1;
 	number = ft_atoi(argv[1]);
-	while (++i <= number)
+	while (++i < number)
 	{
-		information[i].times_to_eat = 0;
-		information[i].id = i;
-		information[i].total_philos = number;
-		information[i].time_to_die = ft_atoi(argv[2]);
-		information[i].time_to_eat = ft_atost(argv[3]);
-		information[i].time_to_sleep = ft_atoi(argv[4]);
-		information[i].control = control;
+	philo[i].times_to_eat = -1;
+		philo[i].id = i + 1;
+		philo[i].total_philos = number;
+		philo[i].time_to_die = ft_atoi(argv[2]);
+		philo[i].time_to_eat = ft_atoi(argv[3]);
+		philo[i].time_to_sleep = ft_atoi(argv[4]);
+		philo[i].control = control;
 		if (argc == 6)
-			information[i].times_to_eat = ft_atoi(argv[5]);
+			philo[i].times_to_eat = ft_atoi(argv[5]);
 	}
 }
 
-void init_control(t_control *control)
+void init_control(t_control *control, t_mutex *forks)
 {
 	control->flag = malloc(sizeof(t_mutex));
 	control->talk = malloc(sizeof(t_mutex));
-	control->meal = malloc(sizeof(t_mutex));
 	pthread_mutex_init(control->talk, NULL);
 	pthread_mutex_init(control->flag, NULL);
-	pthread_mutex_init(control->meal, NULL);
 	control->death = 0;
+	control->simulation_ready = 0;
+	control->forks = forks;
 }

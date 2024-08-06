@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:32:30 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/28 21:20:37 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:25:34 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,32 @@ typedef pthread_mutex_t t_mutex;
 typedef struct s_soft
 {
 	pthread_t	philo;
-	int			times_to_eat;
 	int			id;
 	int			total_philos;
-	int			start_time;
 	int			time_to_sleep;
+	int			times_to_eat;
+	int			time_to_eat;
+	int 		*r_status;
+	int 		*l_status;
 	size_t		time_to_die;
+	size_t		start_time;
 	size_t		last_meal;
-	size_t		time_to_eat;
 	t_mutex		*right_fork;
 	t_mutex		*left_fork;
+	t_mutex		*ready;
 	t_control	*control;
 }	t_soft;
 
 typedef struct s_control
 {
-	int     control;
 	int		death;
+	int		*fork_tags;
+	int		simulation_ready;
 	t_soft	*philos;
 	t_mutex	*talk;
 	t_mutex	*flag;
-	t_mutex *meal;
 	t_mutex *forks;
+	t_mutex *start_flag;
 }   t_control;
 
 //main function
@@ -68,19 +72,25 @@ int		param_error(int i);
 
 //parsing
 int		args_parser(char **argv);
+void	lets_add_forks(t_soft *philos, t_mutex *forks, int *fork_tags);
+void	init_control(t_control *control, t_mutex *forks);
+void	init_philos(t_control *control, t_soft *philo, char **argv, int argc);
+void	free_the_mind(t_control *control);
+int		init_tags(int **fork_tags, char **argv);
 
 //utils
-long	ft_atol(const char *str);
-void	lets_add_forks(t_control *control, t_mutex *forks);
-void	init_control(t_control *control);
-size_t	ft_atost(const char *str);
 void	*routine(void *pointer);
-size_t	get_current_time();
+void	drop_forks(t_soft *philo);
+void	assign_start_flag(t_control *control, t_soft *philo);
+void	clear_start_flags(t_control *control);
+void	check_health(t_soft *philo);
+void	philosophers_assemble(t_soft *philo);
 int		init_mutexes(t_control *control);
+int		is_philo_dead(t_control *control);
 int		cleaner_of_forks(t_control *control, int order);
-int		ft_usleep(size_t miliseconds);
-void	init_philos(t_control *control, t_soft *information, char **argv, int argc);
-int		mind_control_check(int order, t_control *control);
-void	free_the_mind(t_control *control);
-int		check_health(t_soft *information);
+int		ft_usleep(size_t miliseconds, t_soft *philo);
+int		mind_control_check(t_control *control, int order);
+int		can_i_grab_forks(t_soft *philo);
+long	ft_atol(const char *str);
+size_t	get_current_time();
 #endif

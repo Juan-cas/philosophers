@@ -6,91 +6,77 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 00:40:13 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/28 18:45:39 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:30:57 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
 
-static void	print_message(char *str, t_soft *information)
+static void	print_message(char *str, t_soft *philo, int flag)
 {
 	size_t	time;
 
-	pthread_mutex_lock(information->control->talk);
-	time = get_current_time() - information->start_time;
-	if (information->control->death == 0)
-		printf("%zu %d %s\n", time, information->id, str);
-	pthread_mutex_unlock(information->control->talk);
-}
 
-static void lets_sleep(t_soft *information)
-{
-	check_health(information);
-	if (information->control->death == 0)
+	pthread_mutex_lock(philo->control->talk);
+	if (!is_philo_dead(philo->control) && flag == 0)
 	{
-		print_message("is sleeping", information);
-		ft_usleep(information->time_to_sleep);
+		time = get_current_time() - philo->start_time;
+		printf("%zu %d %s\n", time, philo->id, str);
 	}
-}
-
-static void lets_think(t_soft *information)
-{
-	check_health(information);
-	if (information->control->death == 0)
+	else if (!is_philo_dead(philo->control) && flag == 1)
 	{
-		print_message("is thinking", information);
+		time = get_current_time() - philo->start_time;
+		printf("%zu %d has taken a fork\n", time, philo->id);
+		printf("%zu %d has taken a fork\n", time, philo->id);
+		printf("%zu %d has eaten\n", time, philo->id);
 	}
+	pthread_mutex_unlock(philo->control->talk);
 }
 
-static void lets_eat(t_soft *information)
+static void lets_sleep(t_soft *philo)
 {
-	if (information->control->death == 0)
+	print_message("is sleeping", philo, 0);
+	ft_usleep(philo->time_to_sleep, philo);
+}
+static void lets_think(t_soft *philo)
+{
+	check_health(philo);
+	print_message("is thinking", philo, 0);
+}
+
+static void lets_eat(t_soft *philo)
+{
+	while(can_i_grab_forks(philo))
+		usleep(500);
+	check_health(philo);
+	if (!is_philo_dead(philo->control))
 	{
-		if (information->id == 0) {
-			pthread_mutex_lock(information->left_fork);
-			print_message("has taken a fork", information);
-			pthread_mutex_lock(information->right_fork);
-			print_message("has taken a fork", information);
-		}
-		else
-		{
-			pthread_mutex_lock(information->right_fork);
-			print_message("has taken a fork", information);
-			pthread_mutex_lock(information->left_fork);
-			print_message("has taken a fork", information);
-		}
-		check_health(information);
-		print_message("has eaten", information);
-		pthread_mutex_lock(information->control->meal);
-		information->last_meal = get_current_time();
-		if (information->times_to_eat != -1)
-			information->times_to_eat--;
-		pthread_mutex_unlock(information->control->meal);
-		ft_usleep(information->time_to_sleep);
-		pthread_mutex_unlock(information->right_fork);
-		pthread_mutex_unlock(information->left_fork);
+		print_message("eating", philo, 1);
+		ft_usleep(philo->time_to_eat, philo);
+		philo->last_meal = get_current_time();
+		if (philo->times_to_eat > 0)
+			philo->times_to_eat--;
+		drop_forks(philo);
 	}
 }
 
 
 void *routine(void *pointer)
 {
-	t_soft *information = pointer;
+	t_soft *philo = pointer;
 
-	information->start_time = get_current_time();
-	information->last_meal = get_current_time();
+	philosophers_assemble(philo);
+	if (philo->id % 2 == 0)
+		usleep(200);
+	philo->start_time = get_current_time();
+	philo->last_meal = get_current_time();
 	while (1)
 	{
-		lets_eat(information);
-		lets_think(information);
-		lets_sleep(information);
-		if (information->times_to_eat != -1)
-		{
-			if (information->times_to_eat == 0)
-				break ;
-		}
-		if (information->control->death == 1)
+		lets_eat(philo);
+		lets_think(philo);
+		lets_sleep(philo);
+		if (philo->times_to_eat == 0 || is_philo_dead(philo->control))
 			break ;
 	}
 	return (0);

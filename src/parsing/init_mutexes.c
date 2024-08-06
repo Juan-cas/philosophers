@@ -6,12 +6,25 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:41:26 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/07/28 21:22:30 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/08/06 19:28:22 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
+
+static int init_start_flag(t_control *control, t_soft *philo)
+{
+	int i;
+
+	i = -1;
+	while (++i < philo->total_philos)
+	{
+		if (pthread_mutex_init(control->start_flag, NULL) != 0)
+			return 1;
+	}
+	return (-1);
+}
 
 static int	init_forks(t_control *control)
 {
@@ -32,8 +45,6 @@ static int control_mutexes(t_control *control)
 		return (1);
 	if (pthread_mutex_init(control->talk, NULL) != 0)
 		return (2);
-	if (pthread_mutex_init(control->meal, NULL) != 0)
-		return (3);
 	return (-1);
 }
 
@@ -45,18 +56,23 @@ int init_mutexes(t_control *control)
 	checker = control_mutexes(control);
 	if (checker != -1)
 	{
-		mind_control_check(checker, control);
-		free_the_mind(control);
-		return (1);
+		mind_control_check(control, checker);
+		return (free_the_mind(control), 1);
 	}
 	checker = init_forks(control);
 	if (checker != -1)
 	{
 		cleaner_of_forks(control, checker);
-		mind_control_check(3, control);
-		free_the_mind(control);
-		return (1);
+		mind_control_check(control, 3);
+		return (free_the_mind(control), 1);
 	}
-
+	checker = init_start_flag(control, control->philos);
+	if (checker != -1)
+	{
+		cleaner_of_forks(control, control->philos->total_philos);
+		mind_control_check(control, 3);
+		clear_start_flags(control);
+		return (free_the_mind(control), 1);
+	}
 	return (0);
 }
