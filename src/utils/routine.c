@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 00:40:13 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/08/06 20:30:57 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/08/06 23:02:18 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void lets_think(t_soft *philo)
 static void lets_eat(t_soft *philo)
 {
 	while(can_i_grab_forks(philo))
-		usleep(500);
+		usleep(100);
 	check_health(philo);
 	if (!is_philo_dead(philo->control))
 	{
@@ -67,6 +67,7 @@ void *routine(void *pointer)
 	t_soft *philo = pointer;
 
 	philosophers_assemble(philo);
+
 	if (philo->id % 2 == 0)
 		usleep(200);
 	philo->start_time = get_current_time();
@@ -76,7 +77,9 @@ void *routine(void *pointer)
 		lets_eat(philo);
 		lets_think(philo);
 		lets_sleep(philo);
-		if (philo->times_to_eat == 0 || is_philo_dead(philo->control))
+		if (philo->times_to_eat == 0)
+			break ;
+		if (is_philo_dead(philo->control))
 			break ;
 	}
 	return (0);

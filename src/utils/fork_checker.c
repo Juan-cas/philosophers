@@ -6,13 +6,15 @@
 /*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 16:45:19 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/08/06 20:13:42 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/08/06 23:03:59 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
-void	drop_forks(t_soft *philo)
+void drop_forsk
+//TODO: falta hacer cosas aca;
+void	drop_forks_pairs(t_soft *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
 	(*philo->l_status) = 0;
