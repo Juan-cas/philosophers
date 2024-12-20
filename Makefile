@@ -10,7 +10,8 @@ LIB_DIR := lib
 LIBFT_DIR := $(LIB_DIR)/libft
 
 # Source files
-SRC_FILES := $(SRC_DIR)/main.c \
+SRC_FILES := \
+$(SRC_DIR)/main.c \
 $(SRC_DIR)/philo.c \
 $(SRC_DIR)/errors/param_error.c \
 $(SRC_DIR)/errors/errors.c \
