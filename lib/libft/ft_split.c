@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 07:02:50 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/05/22 04:27:51 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/12/19 21:00:14 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static int 	ft_countword(char const *s, char c)
+static int	ft_countword(char const *s, char c)
 {
 	int	count;
 

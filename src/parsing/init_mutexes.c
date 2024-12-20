@@ -3,43 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   init_mutexes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:41:26 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/08/09 22:37:46 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:51:47 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
-
-static int init_start_flag(t_control *control, t_soft *philo)
+static int	init_start_flag(t_control *control, t_soft *philo)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < philo->total_philos)
 	{
 		if (pthread_mutex_init(control->start_flag, NULL) != 0)
-			return 1;
+			return (1);
 	}
 	return (-1);
 }
 
 static int	init_forks(t_control *control)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < control->philos->total_philos)
 	{
-		if (pthread_mutex_init(&control->forks[i],NULL) != 0)
+		if (pthread_mutex_init(&control->forks[i], NULL) != 0)
 			return (i);
 	}
 	return (-1);
 }
 
-static int control_mutexes(t_control *control)
+static int	control_mutexes(t_control *control)
 {
 	if (pthread_mutex_init(control->flag, NULL) != 0)
 		return (1);
@@ -50,10 +49,9 @@ static int control_mutexes(t_control *control)
 	return (-1);
 }
 
-
-int init_mutexes(t_control *control)
+int	init_mutexes(t_control *control)
 {
-	int checker;
+	int	checker;
 
 	checker = control_mutexes(control);
 	if (checker != -1)

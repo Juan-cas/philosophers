@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_current_time.c                                 :+:      :+:    :+:   */
+/*   ft_get_current_time.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:42:51 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/08/02 16:37:42 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:48:29 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
-size_t get_current_time()
+size_t	get_current_time(void)
 {
-	struct timeval time;
+	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
 		write(2, "gettimeofday() error\n", 22);

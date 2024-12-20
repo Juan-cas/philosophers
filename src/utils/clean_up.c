@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:34:18 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/08/11 19:28:43 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:49:57 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
-void free_the_mind(t_control *control)
+void	free_the_mind(t_control *control)
 {
-
 	free(control->flag);
 	free(control->talk);
 	free(control->fork_tags);
@@ -40,15 +39,16 @@ int	mind_control_check(t_control *control, int order)
 	{
 		pthread_mutex_destroy(control->flag);
 		pthread_mutex_destroy(control->talk);
-		return (pthread_mutex_destroy(control->meal), free_the_mind(control), 1);
+		return (pthread_mutex_destroy(control->meal), free_the_mind(control),
+			1);
 	}
 	return (0);
 }
 
-int cleaner_of_forks(t_control *control, int order)
+int	cleaner_of_forks(t_control *control, int order)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = -1;
 	j = 0;

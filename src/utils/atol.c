@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   atol.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 04:27:11 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/05/31 04:27:42 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:50:18 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 
 long	ft_atol(const char *str)
 {
-	int       i;
-	int       sig;
-	long      result;
-	char      *str1;
+	int		i;
+	int		sig;
+	long	result;
+	char	*str1;
 
 	str1 = (char *)str;
 	i = -1;
 	sig = 1;
 	result = 0;
-	while ((str1[++i] >= 9 && str1[i] <= 13) || (str1[i] == ' '));
+	while ((str1[++i] >= 9 && str1[i] <= 13) || (str1[i] == ' '))
+		;
 	if (str1[i] == '-' || str1[i] == '+')
 	{
 		if (str1[i] == '-')

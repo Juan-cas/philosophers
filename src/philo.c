@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.c                                     :+:      :+:    :+:   */
+/*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 19:57:56 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/08/11 19:30:11 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/12/19 21:05:31 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
 
-static int philo_cleaner(t_soft *philo, int total)
+static void free_table(t_soft **philo, t_mutex **forks)
+{
+	free((*philo));
+	free((*forks));
+}
+
+static int	philo_cleaner(t_soft *philo, int total)
 {
 	int	i;
 
@@ -25,15 +31,14 @@ static int philo_cleaner(t_soft *philo, int total)
 	return (i);
 }
 
-static int philo_creator(t_soft *philo, int total)
+static int	philo_creator(t_soft *philo, int total)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < total)
 	{
-		if (pthread_create(&philo[i].philo, NULL,
-						   routine, (void *)&philo[i]))
+		if (pthread_create(&philo[i].philo, NULL, routine, (void *)&philo[i]))
 			return (perror("thread creation failed"), -1);
 	}
 	return (i);
@@ -44,7 +49,6 @@ static void	simulation_start(t_soft *philo, t_control *control)
 	int	total;
 
 	total = philo->total_philos;
-
 	if (philo_creator(philo, total) == -1)
 	{
 		cleaner_of_forks(control, total);
@@ -60,15 +64,16 @@ static void	simulation_start(t_soft *philo, t_control *control)
 	mind_control_check(control, 4);
 }
 
-void philosophers(int argc, char **argv)
+void	philosophers(int argc, char **argv)
 {
 	t_control	control;
-	t_soft		philo[ft_atoi(argv[1])];
-	t_mutex		forks[ft_atoi(argv[1])];
+	t_soft		*philo;
+	t_mutex		*forks;
 	t_mutex		simulation_flag;
 
-
-	if (init_control(&control, forks)  == 1)
+	philo = ft_calloc(ft_atoi(argv[1]), sizeof(t_soft));
+	forks = ft_calloc(ft_atoi(argv[1]), sizeof(t_soft));
+	if (init_control(&control, forks) == 1)
 		return ;
 	init_philos(&control, philo, argv, argc);
 	control.philos = philo;
@@ -85,4 +90,5 @@ void philosophers(int argc, char **argv)
 	}
 	lets_add_forks(philo, forks, control.fork_tags);
 	simulation_start(philo, &control);
+	free_table(&philo, &forks);
 }

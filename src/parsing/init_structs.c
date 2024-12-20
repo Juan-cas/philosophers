@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:24:40 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/08/11 19:20:46 by juan-cas         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:51:57 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../philosophers.h"
 
-
-int init_tags(int **fork_tags, char **argv)
+int	init_tags(int **fork_tags, char **argv)
 {
-	int i;
+	int	i;
 	int	total;
 
 	i = -1;
@@ -28,11 +27,10 @@ int init_tags(int **fork_tags, char **argv)
 	return (0);
 }
 
-void lets_add_forks(t_soft *philos, t_mutex *forks,
-					int *fork_tags)
+void	lets_add_forks(t_soft *philos, t_mutex *forks, int *fork_tags)
 {
 	int	i;
-	int total;
+	int	total;
 
 	i = -1;
 	total = philos[0].total_philos;
@@ -55,16 +53,16 @@ void lets_add_forks(t_soft *philos, t_mutex *forks,
 	}
 }
 
-void init_philos(t_control *control, t_soft *philo, char **argv, int argc)
+void	init_philos(t_control *control, t_soft *philo, char **argv, int argc)
 {
 	int	i;
-	int number;
+	int	number;
 
 	i = -1;
 	number = ft_atoi(argv[1]);
 	while (++i < number)
 	{
-	philo[i].times_to_eat = -1;
+		philo[i].times_to_eat = -1;
 		philo[i].id = i + 1;
 		philo[i].total_philos = number;
 		philo[i].time_to_die = ft_atoi(argv[2]);
@@ -76,7 +74,7 @@ void init_philos(t_control *control, t_soft *philo, char **argv, int argc)
 	}
 }
 
-int init_control(t_control *control, t_mutex *forks)
+int	init_control(t_control *control, t_mutex *forks)
 {
 	control->flag = malloc(sizeof(t_mutex));
 	if (!control->flag)
@@ -86,7 +84,7 @@ int init_control(t_control *control, t_mutex *forks)
 		return (free(control->flag), 1);
 	control->meal = malloc(sizeof(t_mutex));
 	if (!control->meal)
-		return (free(control->flag),free(control->talk), 1);
+		return (free(control->flag), free(control->talk), 1);
 	if (pthread_mutex_init(control->talk, NULL) != 0)
 		return (free_the_mind(control), 1);
 	if (pthread_mutex_init(control->flag, NULL) != 0)

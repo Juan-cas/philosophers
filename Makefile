@@ -13,7 +13,6 @@ LIBFT_DIR := $(LIB_DIR)/libft
 SRC_FILES := $(SRC_DIR)/main.c \
 $(SRC_DIR)/philo.c \
 $(SRC_DIR)/errors/param_error.c \
-$(SRC_DIR)/errors/errors.c \
 $(SRC_DIR)/parsing/parsing.c \
 $(SRC_DIR)/parsing/init_mutexes.c \
 $(SRC_DIR)/parsing/init_structs.c \
