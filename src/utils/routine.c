@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan <juan@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 00:40:13 by juan-cas          #+#    #+#             */
-/*   Updated: 2025/01/17 18:43:55 by juan             ###   ########.fr       */
+/*   Updated: 2025/01/17 20:10:50 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static void	print_message(char *str, t_soft *philo, int flag)
 	size_t	time;
 
 	time = get_current_time() - philo->start_time;
+	check_health(philo);
+	pthread_mutex_lock(philo->control->talk);
 	if (!is_philo_dead(philo->control) && flag == 0)
 		printf("%zu %d %s\n", time, philo->id, str);
 	if (!is_philo_dead(philo->control) && flag == 1)
@@ -25,6 +27,14 @@ static void	print_message(char *str, t_soft *philo, int flag)
 		printf("%zu %d has taken a fork\n", time, philo->id);
 		printf("%zu %d has eaten\n", time, philo->id);
 	}
+	if (philo->control->death == 1)
+	{
+		pthread_mutex_lock(philo->control->talk);
+		printf("%zu %d has died\n", get_current_time() - philo->start_time,
+			philo->id);
+		pthread_mutex_lock(philo->control->talk);
+	}
+	pthread_mutex_unlock(philo->control->talk);
 }
 
 static void	lets_sleep(t_soft *philo)
@@ -61,7 +71,7 @@ static void	lets_eat(t_soft *philo)
 			}
 		drop_forks(philo->l_status, philo->left_fork);
 		}
-		ft_usleep(5, philo);
+		ft_usleep(1, philo);
 	}
 }
 
@@ -70,6 +80,8 @@ void	*routine(void *pointer)
 	t_soft	*philo;
 
 	philo = pointer;
+	if (philo->id % 2 == 1)
+		usleep(100);
 	philo->start_time = get_current_time();
 	philo->last_meal = get_current_time();
 	while (1)

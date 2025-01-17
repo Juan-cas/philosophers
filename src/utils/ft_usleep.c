@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_usleep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan <juan@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:41:13 by juan-cas          #+#    #+#             */
-/*   Updated: 2025/01/17 18:52:36 by juan             ###   ########.fr       */
+/*   Updated: 2025/01/17 19:55:40 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_usleep(size_t miliseconds, t_soft *philo)
 		check_health(philo);
 		if (is_philo_dead(philo->control))
 			break ;
-		usleep(500);
+		usleep(400);
 	}
 	return (0);
 }
