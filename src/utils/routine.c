@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juan <juan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 00:40:13 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/12/19 20:46:52 by juan-cas         ###   ########.fr       */
+/*   Updated: 2025/01/17 18:43:55 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ static void	print_message(char *str, t_soft *philo, int flag)
 {
 	size_t	time;
 
-	pthread_mutex_lock(philo->control->talk);
 	time = get_current_time() - philo->start_time;
-	pthread_mutex_unlock(philo->control->talk);
 	if (!is_philo_dead(philo->control) && flag == 0)
 		printf("%zu %d %s\n", time, philo->id, str);
 	if (!is_philo_dead(philo->control) && flag == 1)
@@ -43,22 +41,28 @@ static void	lets_think(t_soft *philo)
 
 static void	lets_eat(t_soft *philo)
 {
-	while (can_i_grab_forks(philo))
-		;
-	if (!is_philo_dead(philo->control))
+	while(1)
 	{
-		check_health(philo);
-		print_message("eating", philo, 1);
-		pthread_mutex_lock(philo->control->flag);
-		philo->last_meal = get_current_time();
-		pthread_mutex_unlock(philo->control->flag);
-		pthread_mutex_lock(philo->control->meal);
-		if (philo->times_to_eat > 0)
-			philo->times_to_eat--;
-		pthread_mutex_unlock(philo->control->meal);
-		ft_usleep(philo->time_to_eat, philo);
+		if (is_philo_dead(philo->control))
+			break ;
+		if (grab_forks(philo->l_status, philo->left_fork))
+		{
+			if(grab_forks(philo->r_status, philo->right_fork))
+			{
+				check_health(philo);
+				print_message("eating", philo, 1);
+				philo->last_meal = get_current_time();
+				if (philo->times_to_eat > 0)
+					philo->times_to_eat--;
+				ft_usleep(philo->time_to_eat, philo);
+				drop_forks(philo->r_status, philo->right_fork);
+				drop_forks(philo->l_status, philo->left_fork);
+				break ;
+			}
+		drop_forks(philo->l_status, philo->left_fork);
+		}
+		ft_usleep(5, philo);
 	}
-	status_reset(philo);
 }
 
 void	*routine(void *pointer)
@@ -66,7 +70,6 @@ void	*routine(void *pointer)
 	t_soft	*philo;
 
 	philo = pointer;
-	philosophers_assemble(philo);
 	philo->start_time = get_current_time();
 	philo->last_meal = get_current_time();
 	while (1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juan <juan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:32:30 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/12/19 20:59:59 by juan-cas         ###   ########.fr       */
+/*   Updated: 2025/01/17 18:49:04 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ int							is_philo_dead(t_control *control);
 int							cleaner_of_forks(t_control *control, int order);
 int							ft_usleep(size_t miliseconds, t_soft *philo);
 int							mind_control_check(t_control *control, int order);
-int							can_i_grab_forks(t_soft *philo);
+int							grab_forks(int *fork, pthread_mutex_t *mutex);
+void						drop_forks(int *fork, pthread_mutex_t *mutex);
 long						ft_atol(const char *str);
 size_t						get_current_time(void);
 #endif
