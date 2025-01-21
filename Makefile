@@ -27,6 +27,7 @@ $(SRC_DIR)/utils/ft_usleep.c \
 $(SRC_DIR)/utils/routine.c \
 $(SRC_DIR)/utils/check_health.c \
 $(SRC_DIR)/utils/fork_checker.c \
+$(SRC_DIR)/utils/talk_lock.c \
 $(SRC_DIR)/utils/is_dead.c \
 $(SRC_DIR)/utils/philos_assemble.c \
 

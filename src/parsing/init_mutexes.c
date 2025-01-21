@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:41:26 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/12/19 20:51:47 by juan-cas         ###   ########.fr       */
+/*   Updated: 2025/01/21 23:42:48 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static int	control_mutexes(t_control *control)
 		return (2);
 	if (pthread_mutex_init(control->meal, NULL) != 0)
 		return (3);
+	pthread_mutex_init(control->death_mutex, NULL);
 	return (-1);
 }
 

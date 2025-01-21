@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 19:57:56 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/12/19 21:05:31 by juan-cas         ###   ########.fr       */
+/*   Updated: 2025/01/21 23:43:36 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,11 @@ void	philosophers(int argc, char **argv)
 	{
 		cleaner_of_forks(&control, control.philos->total_philos);
 		mind_control_check(&control, 4);
-		pthread_mutex_destroy(control.start_flag);
 		free_the_mind(&control);
 		return ;
 	}
 	lets_add_forks(philo, forks, control.fork_tags);
 	simulation_start(philo, &control);
 	free_table(&philo, &forks);
+	pthread_mutex_destroy(control.death_mutex);
 }

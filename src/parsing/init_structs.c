@@ -6,7 +6,7 @@
 /*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:24:40 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/12/19 20:51:57 by juan-cas         ###   ########.fr       */
+/*   Updated: 2025/01/21 21:34:19 by juan-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,6 @@ int	init_control(t_control *control, t_mutex *forks)
 	control->death = 0;
 	control->simulation_ready = 0;
 	control->forks = forks;
+	control->talking = 0;
 	return (0);
 }
