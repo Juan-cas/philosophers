@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_dead.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juan <juan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:15:07 by juan-cas          #+#    #+#             */
-/*   Updated: 2025/01/21 22:11:32 by juan-cas         ###   ########.fr       */
+/*   Updated: 2025/01/22 00:15:08 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@ int	is_philo_dead(t_control *control)
 		pthread_mutex_unlock(control->flag);
 		return (1);
 	}
-	else
-	{
-		pthread_mutex_unlock(control->flag);
-		return (0);
-	}
+	pthread_mutex_unlock(control->flag);
+	return (0);
 }

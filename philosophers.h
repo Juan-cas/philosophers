@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juan <juan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:32:30 by juan-cas          #+#    #+#             */
-/*   Updated: 2025/01/21 22:02:34 by juan-cas         ###   ########.fr       */
+/*   Updated: 2025/01/22 00:15:08 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_soft
 	int						*r_status;
 	int						*l_status;
 	size_t					time_to_die;
+	size_t					start_time;
 	size_t					last_meal;
 	t_mutex					*right_fork;
 	t_mutex					*left_fork;
@@ -55,14 +56,11 @@ typedef struct s_control
 	int						death;
 	int						*fork_tags;
 	int						simulation_ready;
-	int						talking;
-	size_t					start_time;
 	t_soft					*philos;
 	t_mutex					*talk;
 	t_mutex					*flag;
 	t_mutex					*forks;
 	t_mutex					*meal;
-	t_mutex					*death_mutex;
 	t_mutex					*start_flag;
 }							t_control;
 
@@ -87,9 +85,6 @@ void						*routine(void *pointer);
 void						check_health(t_soft *philo);
 void						philosophers_assemble(t_soft *philo);
 void						status_reset(t_soft *philo);
-void						print_message(char *str, t_soft *philo, int flag);
-void						philo_not_talking(t_soft *philo);
-int							philo_talking(t_soft *philo);
 int							init_mutexes(t_control *control);
 int							is_philo_dead(t_control *control);
 int							cleaner_of_forks(t_control *control, int order);
