@@ -1,62 +1,39 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 15:37:50 by juan-cas          #+#    #+#             */
-/*   Updated: 2024/12/19 20:52:38 by juan-cas         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../philosophers.h"
 
-static int	ft_is_plus(char character)
-{
-	if (character == '+')
-		return (1);
-	return (0);
-}
-
-static int	check_string(char *str)
+static int check_d(char *argv)
 {
 	int	i;
 
 	i = -1;
-	while (str[++i])
+	while (argv[++i])
 	{
-		if ((str[i] < '0' || str[i] > '9') && !ft_is_plus(str[i]) && i == 0)
-			return (param_error(i));
-		if (str[i] < '0' || str[i] > '9')
-			return (param_error(i));
+		if(ft_isdigit(argv[i]))
+			return (1);
 	}
-	return (-1);
-}
-
-static int	check_num_philos(char *str)
-{
-	if (ft_atol(str) > 200)
-		return (1);
 	return (0);
 }
 
-int	args_parser(char **argv)
+int lets_parse(int argc, char **argv)
 {
-	int		i;
-	long	comparer;
+	int checker;
 
-	i = 0;
-	while (argv[++i])
-		check_string(argv[i]);
-	i = 0;
-	if (check_num_philos(argv[1]))
-		return (param_error(1));
-	while (argv[++i])
+	checker = ft_atol(argv[1]);
+	if (checker > 200 || checker < 1 || check_d(argv[1]))
+		return (perror("need 1 to 200 philos\n"), 1);
+	checker = ft_atol(argv[2]);
+	if (checker < 0 || check_d(argv[2]))
+		return (perror("please check time to die\n"), 1);
+	checker = ft_atol(argv[3]);
+	if (checker < 0 || check_d(argv[3]))
+		return (perror("please check time to eat\n"), 1);
+	checker = ft_atol(argv[4]);
+	if (checker < 0 || check_d(argv[4]))
+		return (perror("please check time to sleep\n"), 1);
+	if (argc == 6)
 	{
-		comparer = ft_atol(argv[i]);
-		if (comparer > INT_MAX || comparer <= 0)
-			return (param_error(i));
+		checker = ft_atol(argv[5]);
+		if (checker < 0 || check_d(argv[5]))
+			return (perror("please check times to eat\n"), 1);
 	}
 	return (0);
 }

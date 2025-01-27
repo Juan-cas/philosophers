@@ -1,6 +1,6 @@
 # Compiler and flags
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror -g -fsanitize=thread
+CFLAGS := -Wall -Wextra -Werror -g -fsanitize=leak,address
 
 
 # Directories
@@ -11,25 +11,15 @@ LIBFT_DIR := $(LIB_DIR)/libft
 
 # Source files
 SRC_FILES := $(SRC_DIR)/main.c \
-$(SRC_DIR)/philo.c \
-$(SRC_DIR)/errors/param_error.c \
 $(SRC_DIR)/parsing/parsing.c \
-$(SRC_DIR)/parsing/init_mutexes.c \
-$(SRC_DIR)/parsing/init_structs.c \
-$(SRC_DIR)/utils/atol.c \
-$(SRC_DIR)/utils/ft_atost.c \
-$(SRC_DIR)/utils/ft_get_current_time.c \
-$(SRC_DIR)/utils/ft_usleep.c \
-$(SRC_DIR)/utils/check_health.c \
-$(SRC_DIR)/utils/clean_up.c \
-$(SRC_DIR)/utils/ft_get_current_time.c \
-$(SRC_DIR)/utils/ft_usleep.c \
-$(SRC_DIR)/utils/routine.c \
-$(SRC_DIR)/utils/check_health.c \
-$(SRC_DIR)/utils/fork_checker.c \
-$(SRC_DIR)/utils/talk_lock.c \
-$(SRC_DIR)/utils/is_dead.c \
-$(SRC_DIR)/utils/philos_assemble.c \
+$(SRC_DIR)/utils/ft_atol.c \
+$(SRC_DIR)/utils/get_time.c \
+$(SRC_DIR)/utils/health_check.c \
+$(SRC_DIR)/utils/init_sim.c \
+$(SRC_DIR)/utils/philos.c \
+$(SRC_DIR)/utils/sim.c \
+$(SRC_DIR)/utils/fork_management.c \
+
 
 # Object files
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))

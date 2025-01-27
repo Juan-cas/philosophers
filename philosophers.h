@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juan-cas <juan-cas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juan <juan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:32:30 by juan-cas          #+#    #+#             */
-/*   Updated: 2025/01/21 22:02:34 by juan-cas         ###   ########.fr       */
+/*   Updated: 2025/01/27 09:02:01 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,73 +30,57 @@
 # define M "\033[1;35m"   // bold magenta
 # define W "\033[1;37m"   // bold white
 
-typedef struct s_control	t_control;
+typedef struct s_table	t_table;
+typedef struct timeval	t_time;
 typedef pthread_mutex_t		t_mutex;
 
-typedef struct s_soft
+typedef struct s_philosopher
 {
-	pthread_t				philo;
+	pthread_t				phi;
 	int						id;
-	int						total_philos;
 	int						time_to_sleep;
 	int						times_to_eat;
 	int						time_to_eat;
+	t_mutex					*right_fork;
 	int						*r_status;
+	t_mutex					*left_fork;
 	int						*l_status;
 	size_t					time_to_die;
+	size_t					start_time;
 	size_t					last_meal;
-	t_mutex					*right_fork;
-	t_mutex					*left_fork;
-	t_control				*control;
-}							t_soft;
+	t_table					*table;
+}							t_philo;
 
-typedef struct s_control
+typedef struct s_table
 {
 	int						death;
 	int						*fork_tags;
-	int						simulation_ready;
 	int						talking;
-	size_t					start_time;
-	t_soft					*philos;
+	t_philo					**philos;
 	t_mutex					*talk;
 	t_mutex					*flag;
 	t_mutex					*forks;
-	t_mutex					*meal;
-	t_mutex					*death_mutex;
-	t_mutex					*start_flag;
-}							t_control;
+}							t_table;
 
 // main function
-void						philosophers(int argc, char **argv);
 
 // errors
-int							param_error(int i);
 
 // parsing
-int							args_parser(char **argv);
-void						lets_add_forks(t_soft *philos, t_mutex *forks,
-								int *fork_tags);
-void						init_philos(t_control *control, t_soft *philo,
-								char **argv, int argc);
-void						free_the_mind(t_control *control);
-int							init_tags(int **fork_tags, char **argv);
-int							init_control(t_control *control, t_mutex *forks);
+int		lets_parse(int argc, char **argv);
 
 // utils
-void						*routine(void *pointer);
-void						check_health(t_soft *philo);
-void						philosophers_assemble(t_soft *philo);
-void						status_reset(t_soft *philo);
-void						print_message(char *str, t_soft *philo, int flag);
-void						philo_not_talking(t_soft *philo);
-int							philo_talking(t_soft *philo);
-int							init_mutexes(t_control *control);
-int							is_philo_dead(t_control *control);
-int							cleaner_of_forks(t_control *control, int order);
-int							ft_usleep(size_t miliseconds, t_soft *philo);
-int							mind_control_check(t_control *control, int order);
-int							grab_forks(int *fork, pthread_mutex_t *mutex);
-void						drop_forks(int *fork, pthread_mutex_t *mutex);
-long						ft_atol(const char *str);
-size_t						get_current_time(void);
+int		philos(int argc, char **argv);
+void	*routine(void *philo);
+void	init_sim(int nb, t_table *table);
+size_t	get_current_time(void);
+void	check_health(t_philo *philo);
+int		philo_dead(t_table *table);
+void	philo_just_died(t_table *table);
+long	ft_atol(const char *str);
+void	talk(int flag, size_t s_time, t_philo *philo);
+void	clean_sim(int nb, t_table *table);
+int		pick_fork(int *fork, t_mutex *mutex);
+void	drop_fork(int *fork, t_mutex *mutex);
+
 #endif
