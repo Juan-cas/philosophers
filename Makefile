@@ -1,6 +1,6 @@
 # Compiler and flags
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror -g -fsanitize=leak,address
+CFLAGS := -Wall -Wextra -Werror #-g -fsanitize=thread
 
 
 # Directories

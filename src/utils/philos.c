@@ -1,23 +1,31 @@
 #include "../../philosophers.h"
 
-static void fill_forks(int nb, t_table *table, t_philo *philo)
+static void fill_status(int nb, t_table *table, t_philo *philo)
 {
 	if (philo->id == nb - 1)
+	{
+		philo->l_status = &table->fork_tags[philo->id];
 		philo->r_status = &table->fork_tags[0];
+	}
 	else
+	{
+		philo->l_status = &table->fork_tags[philo->id];
 		philo->r_status = &table->fork_tags[philo->id + 1];
-	if (philo->id == 0)
-		philo->l_status = &table->fork_tags[nb - 1];
-	else
-		philo->l_status = &table->fork_tags[philo->id - 1];
-	if (philo->id == nb - 1)
+	}
+}
+
+static void fill_forks(int nb, t_table *table, t_philo *philo)
+{
+	if(philo->id == nb - 1)
+	{
+		philo->left_fork = &table->forks[philo->id];
 		philo->right_fork = &table->forks[0];
+	}
 	else
+	{
+		philo->left_fork = &table->forks[philo->id];
 		philo->right_fork = &table->forks[philo->id + 1];
-	if (philo->id == 0)
-		philo->left_fork = &table->forks[nb - 1];
-	else
-		philo->left_fork = &table->forks[philo->id - 1];
+	}
 }
 
 static void init_philo(int ac, char **av, int nb, t_table *table)
@@ -41,6 +49,7 @@ static void init_philo(int ac, char **av, int nb, t_table *table)
 		philo->last_meal = get_current_time();
 		philo->table = table;
 		table->philos[i] = philo;
+		fill_status(nb, table, philo);
 		fill_forks(nb, table, philo);
 	}
 }

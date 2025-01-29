@@ -6,11 +6,8 @@ void talk(int flag, size_t s_time, t_philo *philo)
 
 	c_time = get_current_time() - s_time;
 	pthread_mutex_lock(philo->table->talk);
-	if (philo_dead(philo->table))
-	{
-		pthread_mutex_unlock(philo->table->talk);
+	if (philo_dead(philo->table, 0))
 		return ;
-	}
 	if (flag == 1)
 		printf("%zu philo %d took a fork\n", c_time, philo->id + 1);
 	if (flag == 2)
@@ -22,7 +19,7 @@ void talk(int flag, size_t s_time, t_philo *philo)
 	if (flag == 5)
 	{
 		printf("%zu philo %d has died\n", c_time, philo->id + 1);
-		philo_just_died(philo->table);	
+		philo_dead(philo->table, 1);	
 	}
 	pthread_mutex_unlock(philo->table->talk);
 }
@@ -35,11 +32,11 @@ int	ft_usleep(size_t milliseconds, t_philo *philo)
 	start = get_current_time();
 	while (1)
 	{
+		check_health(philo);
 		current = get_current_time();
 		if ((current - start) >= milliseconds)
 			break;
-		check_health(philo);
-		if (philo_dead(philo->table))
+		if (philo_dead(philo->table, 0))
 			break;
 		usleep(200);
 	}
@@ -59,11 +56,12 @@ static void eat(t_philo *philo)
 	while(1)
 	{
 		check_health(philo);
-		if (philo_dead(philo->table))
+		printf("%d\n", philo->id + 1);
+		if (philo_dead(philo->table, 0))
 			return;
-		if (pick_fork(philo->l_status, philo->left_fork))
+		if (pick_fork(philo->r_status, philo->right_fork))
 		{
-			if (pick_fork(philo->r_status, philo->right_fork))
+			if (pick_fork(philo->l_status, philo->left_fork))
 			{
 				talk(1, philo->start_time, philo);
 				talk(1, philo->start_time, philo);
@@ -85,10 +83,12 @@ void *routine(void *philosopher)
 	t_philo *philo;
 
 	philo = (t_philo *)philosopher;
+	if (philo->id % 2 == 0)
+		ft_usleep(1, philo);
 	while(1)
 	{
 		check_health(philo);
-		if (philo_dead(philo->table))
+		if (philo_dead(philo->table, 0))
 			break ;
 		if (philo->times_to_eat == 0)
 			break ;

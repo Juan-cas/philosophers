@@ -6,7 +6,7 @@
 /*   By: juan <juan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:32:30 by juan-cas          #+#    #+#             */
-/*   Updated: 2025/01/27 09:02:01 by juan             ###   ########.fr       */
+/*   Updated: 2025/01/29 12:40:15 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,7 @@ void	*routine(void *philo);
 void	init_sim(int nb, t_table *table);
 size_t	get_current_time(void);
 void	check_health(t_philo *philo);
-int		philo_dead(t_table *table);
-void	philo_just_died(t_table *table);
+int		philo_dead(t_table *table, int flag);
 long	ft_atol(const char *str);
 void	talk(int flag, size_t s_time, t_philo *philo);
 void	clean_sim(int nb, t_table *table);
